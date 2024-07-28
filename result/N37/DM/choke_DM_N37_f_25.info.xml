@@ -1,0 +1,642 @@
+<?xml version="1.0"?>
+
+<cfsInfo status="finished" infoWriteCounter="6" infoRejectCounter="0">
+  <summary>
+    <timer wall-clock="2m 55.04s" wall="175.039" cpu="787.577" calls="1"/>
+    <!-- memory in MB-->
+    <memory final="8750" peak="8750"/>
+  </summary>
+  <header id="">
+    <environment started="2023-May-13 02:06:19" host="DESKTOP-7O34DCM" estimatedEnd="2023-May-13 02:09:14" remainingTime="0" timePerStep="0"/>
+    <progOpts problem="choke_DM_N37_f_25" parameterFile="/mnt/c/Users/lk/Desktop/TU/MA/result/N37/DM2/choke_DM_freq.xml" schemaPath="/mnt/c/Users/lk/Devel/CFS_SRC/cfs/share/xml" meshFile="" logConfFile="" detailed="no">
+      <cfs version="23.03" name="Heavy Headache" build="Release" git_commit="" git_branch="" compiled="May 11 2023" exe="/mnt/c/Users/lk/Devel/CFS_BIN/build_opt/bin/cfs"/>
+      <openmp CFS_NUM_THREADS="10" MKL_NUM_THREADS="10" OMP_NUM_THREADS="10"/>
+    </progOpts>
+    <domain>
+      <grids>
+        <timer wall-clock="5.115s" wall="5.115" cpu="2.87738" calls="1"/>
+        <grid gridId="default" dimensions="3" elements="48132" nodes="44032"/>
+      </grids>
+      <coordinateSystems>
+        <system name="default"/>
+      </coordinateSystems>
+      <regions>
+        <region name="V_air" id="0" type="volume" regular="no" hom="yes" nodes="39584" elems="33490" isQuadratic="no"/>
+        <region name="V_busbar_1" id="1" type="volume" regular="no" hom="yes" nodes="1584" elems="1200" isQuadratic="no"/>
+        <region name="V_busbar_2" id="2" type="volume" regular="no" hom="yes" nodes="1584" elems="1200" isQuadratic="no"/>
+        <region name="V_choke" id="3" type="volume" regular="no" hom="yes" nodes="5472" elems="3800" isQuadratic="no"/>
+        <region name="S_air" id="4" type="surface" regular="no" hom="yes" nodes="8192" elems="8122" isQuadratic="no"/>
+        <region name="S_bar_1_in" id="5" type="surface" regular="no" hom="yes" nodes="99" elems="80" isQuadratic="no"/>
+        <region name="S_bar_1_out" id="6" type="surface" regular="no" hom="yes" nodes="99" elems="80" isQuadratic="no"/>
+        <region name="S_bar_2_in" id="7" type="surface" regular="no" hom="yes" nodes="99" elems="80" isQuadratic="no"/>
+        <region name="S_bar_2_out" id="8" type="surface" regular="no" hom="yes" nodes="99" elems="80" isQuadratic="no"/>
+      </regions>
+      <namedNodes/>
+      <namedElements/>
+      <globalMathParser dt="0" f="23342" step="1" t="0" t0="0"/>
+    </domain>
+    <results>
+      <timer wall-clock="3.686s" wall="3.686" cpu="1.18491" calls="34"/>
+    </results>
+  </header>
+  <sequenceStep sequence="1">
+    <harmonic>
+      <header unit="Hz" sampling="frequency list given" start="0" end="23342" numFreq="1"/>
+      <init_harmonic>
+        <timer wall-clock="39.81s" wall="39.81" cpu="47.5455" calls="1"/>
+      </init_harmonic>
+    </harmonic>
+    <PDE>
+      <Darwin>
+        <header>
+          <region name="V_choke" damping="none"/>
+          <region name="V_air" damping="none"/>
+          <region name="V_busbar_1" damping="none"/>
+          <region name="V_busbar_2" damping="none"/>
+          <integrators>
+            <matrixBiLinearForms>
+              <bilinearForm integrator="K_phi_A_sigma" type="ABInt" complex="no" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="58000000"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_p_A_epsilon" type="ABInt" complex="no" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="2" result="lagrangeMultiplier"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_A_epsilon" type="ABInt" complex="no" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_phi_sigma" type="ABInt" complex="no" BOp="GradientOperator" region="V_choke">
+                <coef type="CoefFunctionConst" value="0.33333299999999999"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_phi_epsilon" type="BBInt" complex="no" BOp="GradientOperator" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_phi_sigma" type="BBInt" complex="no" BOp="GradientOperator" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="58000000"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="damping_aux" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_A_sigma" type="ABInt" complex="no" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="58000000"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_phi_sigma" type="ABInt" complex="no" BOp="GradientOperator" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="58000000"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_phi_epsilon" type="BBInt" complex="no" BOp="GradientOperator" region="V_choke">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_phi_sigma" type="BBInt" complex="no" BOp="GradientOperator" region="V_choke">
+                <coef type="CoefFunctionConst" value="0.33333299999999999"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="damping_aux" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_p_epsilon" type="ABInt" complex="no" BOp="GradientOperator" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="2" result="lagrangeMultiplier"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_A_sigma" type="BBInt" complex="no" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="58000000"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_A_nu" type="BBInt" complex="yes" BOp="CurlOperator" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="(795798,0)"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_p_A_epsilon" type="ABInt" complex="no" region="V_choke">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="2" result="lagrangeMultiplier"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_phi_sigma" type="ABInt" complex="no" BOp="GradientOperator" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="58000000"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_p_epsilon" type="ABInt" complex="no" BOp="GradientOperator" region="V_choke">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="2" result="lagrangeMultiplier"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_A_nu" type="BBInt" complex="yes" BOp="CurlOperator" region="V_choke">
+                <coef type="CoefFunctionConst" value="(127.013,-2.2847)"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_A_nu" type="BBInt" complex="yes" BOp="CurlOperator" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="(795798,0)"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_A_sigma" type="BBInt" complex="no" region="V_choke">
+                <coef type="CoefFunctionConst" value="0.33333299999999999"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_A_sigma" type="ABInt" complex="no" region="V_choke">
+                <coef type="CoefFunctionConst" value="0.33333299999999999"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_phi_epsilon" type="ABInt" complex="no" BOp="GradientOperator" region="V_choke">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_phi_epsilon" type="ABInt" complex="no" BOp="GradientOperator" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_phi_epsilon" type="ABInt" complex="no" BOp="GradientOperator" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_phi_sigma" type="BBInt" complex="no" BOp="GradientOperator" region="V_busbar_2">
+                <coef type="CoefFunctionConst" value="58000000"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="damping_aux" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_A_epsilon" type="ABInt" complex="no" region="V_choke">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_p_A_epsilon" type="ABInt" complex="no" region="V_air">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="2" result="lagrangeMultiplier"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_p_epsilon" type="ABInt" complex="no" BOp="GradientOperator" region="V_air">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="2" result="lagrangeMultiplier"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_A_epsilon" type="ABInt" complex="no" region="V_air">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_phi_epsilon" type="ABInt" complex="no" BOp="GradientOperator" region="V_air">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_phi_epsilon" type="BBInt" complex="no" BOp="GradientOperator" region="V_air">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_p_A_epsilon" type="ABInt" complex="no" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="2" result="lagrangeMultiplier"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_p_epsilon" type="ABInt" complex="no" BOp="GradientOperator" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="2" result="lagrangeMultiplier"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_A_epsilon" type="ABInt" complex="no" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="no" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_phi_phi_epsilon" type="BBInt" complex="no" BOp="GradientOperator" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="8.8560000000000002e-12"/>
+                <row pde="Darwin" functionId="0" result="elecPotential"/>
+                <column pde="Darwin" functionId="0" result="elecPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_A_nu" type="BBInt" complex="yes" BOp="CurlOperator" region="V_air">
+                <coef type="CoefFunctionConst" value="(795798,0)"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="stiffness" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+              <bilinearForm integrator="K_A_A_sigma" type="BBInt" complex="no" region="V_busbar_1">
+                <coef type="CoefFunctionConst" value="58000000"/>
+                <row pde="Darwin" functionId="1" result="magPotential"/>
+                <column pde="Darwin" functionId="1" result="magPotential"/>
+                <destination feMatrix="damping" feMatrixMapped="system" feSecondMatrix="no_fe_matrix" feSecondMatrixFac="0.0  "/>
+                <attributes entryType="RealPart" counterPart="no" symmetric="yes" solutionDependent="no" updatedGeo="yes"/>
+              </bilinearForm>
+            </matrixBiLinearForms>
+            <rhsLinearForms/>
+          </integrators>
+        </header>
+        <material name="copper">
+          <regionList>
+            <region name="V_busbar_1"/>
+            <region name="V_busbar_2"/>
+          </regionList>
+          <property name="Magnetic_Permeability_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 1.256600e-06  0.000000e+00  0.000000e+00
+                 0.000000e+00  1.256600e-06  0.000000e+00
+                 0.000000e+00  0.000000e+00  1.256600e-06
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Permeability_Scalar" value="(1.2566e-06,0)"/>
+          <property name="Magnetic_Reluctivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 7.957982e+05  0.000000e+00  0.000000e+00
+                 0.000000e+00  7.957982e+05  0.000000e+00
+                 0.000000e+00  0.000000e+00  7.957982e+05
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Reluctivity_Scalar" value="(795798,0)"/>
+          <property name="Magnetic_Conductivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 5.800000e+07  0.000000e+00  0.000000e+00
+                 0.000000e+00  5.800000e+07  0.000000e+00
+                 0.000000e+00  0.000000e+00  5.800000e+07
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Conductivity_Scalar" value="(5.8e+07,0)"/>
+          <property name="Magnetic_Permittivity_Scalar" value="(8.856e-12,0)"/>
+          <property name="Magnetic_Permittivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 8.856000e-12  0.000000e+00  0.000000e+00
+                 0.000000e+00  8.856000e-12  0.000000e+00
+                 0.000000e+00  0.000000e+00  8.856000e-12
+              </real>
+            </tensor>
+          </property>
+          <property name="prescribedMagnetization" value="0"/>
+          <property name="Density" value="0"/>
+          <property name="Magnetic_Permeability_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 1.256600e-06  0.000000e+00  0.000000e+00
+                 0.000000e+00  1.256600e-06  0.000000e+00
+                 0.000000e+00  0.000000e+00  1.256600e-06
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Permeability_Scalar" value="(1.2566e-06,0)"/>
+          <property name="Magnetic_Reluctivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 7.957982e+05  0.000000e+00  0.000000e+00
+                 0.000000e+00  7.957982e+05  0.000000e+00
+                 0.000000e+00  0.000000e+00  7.957982e+05
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Reluctivity_Scalar" value="(795798,0)"/>
+          <property name="Magnetic_Conductivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 5.800000e+07  0.000000e+00  0.000000e+00
+                 0.000000e+00  5.800000e+07  0.000000e+00
+                 0.000000e+00  0.000000e+00  5.800000e+07
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Conductivity_Scalar" value="(5.8e+07,0)"/>
+          <property name="Magnetic_Permittivity_Scalar" value="(8.856e-12,0)"/>
+          <property name="Magnetic_Permittivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 8.856000e-12  0.000000e+00  0.000000e+00
+                 0.000000e+00  8.856000e-12  0.000000e+00
+                 0.000000e+00  0.000000e+00  8.856000e-12
+              </real>
+            </tensor>
+          </property>
+          <property name="prescribedMagnetization" value="0"/>
+          <property name="Density" value="0"/>
+        </material>
+        <material name="ferrite_75">
+          <regionList>
+            <region name="V_choke"/>
+          </regionList>
+          <property name="Magnetic_Permeability_Tensor">
+            <tensor dim1="3" dim2="3">
+              <complex>
+                (7.870636e-03,1.415761e-04) (0.000000e+00,0.000000e+00) (0.000000e+00,0.000000e+00)
+                (0.000000e+00,0.000000e+00) (7.870636e-03,1.415761e-04) (0.000000e+00,0.000000e+00)
+                (0.000000e+00,0.000000e+00) (0.000000e+00,0.000000e+00) (7.870636e-03,1.415761e-04)
+              </complex>
+            </tensor>
+          </property>
+          <property name="Magnetic_Permeability_Scalar" value="(0.00787064,0.000141576)"/>
+          <property name="Magnetic_Reluctivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <complex>
+                (1.270134e+02,-2.284703e+00) (0.000000e+00,0.000000e+00) (0.000000e+00,0.000000e+00)
+                (0.000000e+00,0.000000e+00) (1.270134e+02,-2.284703e+00) (0.000000e+00,0.000000e+00)
+                (0.000000e+00,0.000000e+00) (0.000000e+00,0.000000e+00) (1.270134e+02,-2.284703e+00)
+              </complex>
+            </tensor>
+          </property>
+          <property name="Magnetic_Reluctivity_Scalar" value="(127.013,-2.2847)"/>
+          <property name="Magnetic_Conductivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 3.333330e-01  0.000000e+00  0.000000e+00
+                 0.000000e+00  3.333330e-01  0.000000e+00
+                 0.000000e+00  0.000000e+00  3.333330e-01
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Conductivity_Scalar" value="(0.333333,0)"/>
+          <property name="Magnetic_Permittivity_Scalar" value="(8.856e-12,0)"/>
+          <property name="Magnetic_Permittivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 8.856000e-12  0.000000e+00  0.000000e+00
+                 0.000000e+00  8.856000e-12  0.000000e+00
+                 0.000000e+00  0.000000e+00  8.856000e-12
+              </real>
+            </tensor>
+          </property>
+          <property name="prescribedMagnetization" value="0"/>
+          <property name="Density" value="0"/>
+        </material>
+        <material name="air">
+          <regionList>
+            <region name="V_air"/>
+          </regionList>
+          <property name="Magnetic_Permeability_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 1.256600e-06  0.000000e+00  0.000000e+00
+                 0.000000e+00  1.256600e-06  0.000000e+00
+                 0.000000e+00  0.000000e+00  1.256600e-06
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Permeability_Scalar" value="(1.2566e-06,0)"/>
+          <property name="Magnetic_Reluctivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 7.957982e+05  0.000000e+00  0.000000e+00
+                 0.000000e+00  7.957982e+05  0.000000e+00
+                 0.000000e+00  0.000000e+00  7.957982e+05
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Reluctivity_Scalar" value="(795798,0)"/>
+          <property name="Magnetic_Conductivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 0.000000e+00  0.000000e+00  0.000000e+00
+                 0.000000e+00  0.000000e+00  0.000000e+00
+                 0.000000e+00  0.000000e+00  0.000000e+00
+              </real>
+            </tensor>
+          </property>
+          <property name="Magnetic_Conductivity_Scalar" value="(0,0)"/>
+          <property name="Magnetic_Permittivity_Scalar" value="(8.856e-12,0)"/>
+          <property name="Magnetic_Permittivity_Tensor">
+            <tensor dim1="3" dim2="3">
+              <real>
+                 8.856000e-12  0.000000e+00  0.000000e+00
+                 0.000000e+00  8.856000e-12  0.000000e+00
+                 0.000000e+00  0.000000e+00  8.856000e-12
+              </real>
+            </tensor>
+          </property>
+          <property name="prescribedMagnetization" value="0"/>
+          <property name="Density" value="0"/>
+        </material>
+        <feSpaces>
+          <magPotential>
+            <hCurlHierarchical>
+              <regionList>
+                <V_air/>
+                <default order="0"/>
+                <V_busbar_1/>
+                <V_busbar_2/>
+                <V_choke/>
+              </regionList>
+              <virtualNodes numVirtualNodes="127632">
+                <INTERIOR numEntitiies="48132" numVirtualNodes="0"/>
+                <FACE numEntitiies="123291" numVirtualNodes="0"/>
+                <EDGE numEntitiies="127632" numVirtualNodes="127632"/>
+                <VERTEX numEntitiies="44032" numVirtualNodes="0"/>
+              </virtualNodes>
+            </hCurlHierarchical>
+          </magPotential>
+          <elecPotential>
+            <h1Nodal>
+              <regionList>
+                <V_air order="1" polyMapType="serendipity"/>
+                <V_busbar_1 order="1" polyMapType="serendipity"/>
+                <V_busbar_2 order="1" polyMapType="serendipity"/>
+                <V_choke order="1" polyMapType="serendipity"/>
+              </regionList>
+              <virtualNodes numVirtualNodes="44032">
+                <FACE numEntitiies="123291" numVirtualNodes="0"/>
+                <EDGE numEntitiies="127632" numVirtualNodes="0"/>
+                <VERTEX numEntitiies="44032" numVirtualNodes="44032"/>
+              </virtualNodes>
+            </h1Nodal>
+          </elecPotential>
+          <lagrangeMultiplier>
+            <h1Nodal>
+              <regionList>
+                <V_air order="1" polyMapType="serendipity"/>
+                <V_busbar_1 order="1" polyMapType="serendipity"/>
+                <V_busbar_2 order="1" polyMapType="serendipity"/>
+                <V_choke order="1" polyMapType="serendipity"/>
+              </regionList>
+              <virtualNodes numVirtualNodes="44032">
+                <FACE numEntitiies="123291" numVirtualNodes="0"/>
+                <EDGE numEntitiies="127632" numVirtualNodes="0"/>
+                <VERTEX numEntitiies="44032" numVirtualNodes="44032"/>
+              </virtualNodes>
+            </h1Nodal>
+          </lagrangeMultiplier>
+        </feSpaces>
+        <feFunctions>
+          <elecPotential/>
+          <homDirichletBC>
+            <surfElemList name="S_air" dofs="x"/>
+            <surfElemList name="S_bar_1_in" dofs="x"/>
+            <surfElemList name="S_bar_2_in" dofs="x"/>
+            <surfElemList name="S_bar_1_out" dofs="x"/>
+            <surfElemList name="S_bar_2_out" dofs="x"/>
+          </homDirichletBC>
+          <inhomDirichletBC>
+            <surfElemList name="S_bar_1_in" dofs="" value="(0,0)"/>
+            <surfElemList name="S_bar_2_in" dofs="" value="(0,0)"/>
+            <surfElemList name="S_bar_1_out" dofs="" value="(0,0)"/>
+            <surfElemList name="S_bar_2_out" dofs="" value="(0,0)"/>
+            <surfElemList name="S_air" dofs="" value="(0,0)"/>
+          </inhomDirichletBC>
+          <magPotential/>
+          <lagrangeMultiplier/>
+        </feFunctions>
+      </Darwin>
+    </PDE>
+    <OLAS>
+      <Darwin>
+        <setup idbcHandling="elimination" staticCondensation="no">
+          <feFunctions totalNumEqns="198812" totalNumFreeEqns="189972" totalNumDirichlet="8840">
+            <function id="0" name="elecPotential" numEqns="44032" lastFreeEqn="43636" numDirichlet="396">
+              <usedInBlocks>
+                <block id="0"/>
+              </usedInBlocks>
+            </function>
+            <function id="1" name="magPotential" numEqns="110748" lastFreeEqn="110748" numDirichlet="0">
+              <usedInBlocks>
+                <block id="0"/>
+              </usedInBlocks>
+            </function>
+            <function id="2" name="lagrangeMultiplier" numEqns="44032" lastFreeEqn="35588" numDirichlet="8444">
+              <usedInBlocks>
+                <block id="0"/>
+              </usedInBlocks>
+            </function>
+          </feFunctions>
+          <sbmBlocks>
+            <block id="0" size="198812" lastFreeIndex="189972"/>
+          </sbmBlocks>
+        </setup>
+        <solver>
+          <pardiso hermitean="no" symStruct="no" symmetric="no" posDef="no" pardiso_matrix="13" solver="direct">
+            <summary>
+              <setup>
+                <timer label="setup_pardiso" wall-clock="1m 28.99s" wall="88.988" cpu="599.069" calls="1"/>
+              </setup>
+              <solve>
+                <timer label="solve_pardiso" wall-clock="1.983s" wall="1.983" cpu="12.0897" calls="1"/>
+              </solve>
+            </summary>
+            <process>
+              <call number="0">
+                <symbfact cpu="15.765" wall="14.943" peakMem="711332" permanentMem="480797"/>
+                <numfact cpu="583.26" wall="73.917" peakMem="6415678"/>
+              </call>
+            </process>
+          </pardiso>
+        </solver>
+        <precond>
+          <idPrecond>
+            <summary>
+              <precond_Id_setup>
+                <timer wall-clock="0s" wall="0" cpu="9e-06" calls="1"/>
+              </precond_Id_setup>
+              <precond_Id_run>
+                <timer wall-clock="0s" wall="0" cpu="0" calls="0"/>
+              </precond_Id_run>
+            </summary>
+          </idPrecond>
+        </precond>
+        <process>
+          <solver solutionIsOkay="yes"/>
+        </process>
+      </Darwin>
+      <graph_setup>
+        <timer wall-clock="35.24s" wall="35.237" cpu="42.445" calls="1" sub="true"/>
+      </graph_setup>
+      <reorder_Metis>
+        <timer wall-clock="27.72s" wall="27.72" cpu="27.5761" calls="1" sub="true"/>
+      </reorder_Metis>
+    </OLAS>
+    <analysis>
+      <summary>
+        <assemble>
+          <timer wall-clock="11.36s" wall="11.358" cpu="111.493" calls="2"/>
+        </assemble>
+      </summary>
+    </analysis>
+  </sequenceStep>
+  <warning lineNum="3572" fileName="/mnt/c/Users/lk/Devel/CFS_SRC/cfs/source/PDE/SinglePDE.cc" message="Developer Info: use SetFeFct() to make averaged results work for 'magEddyCurrentDensity'"/>
+</cfsInfo>

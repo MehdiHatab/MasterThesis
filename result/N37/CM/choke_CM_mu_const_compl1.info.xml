@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<cfsInfo status="aborted" infoWriteCounter="3" infoRejectCounter="0" error="
+xml file /mu_const_complex/CM2/choke_CM1.xml doesn't exist
+
+In file '/mnt/c/Users/lk/Devel/CFS_SRC/cfs/source/DataInOut/ParamHandling/Xerces.cc' at line 58
+">
+  <summary>
+    <timer wall-clock="0.109s" wall="0.109" cpu="0.016371" calls="1"/>
+  </summary>
+  <header>
+    <environment started="2023-May-12 14:17:15" host="DESKTOP-7O34DCM"/>
+  </header>
+</cfsInfo>

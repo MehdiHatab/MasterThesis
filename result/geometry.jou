@@ -1,0 +1,179 @@
+reset
+undo on
+
+### choke
+# { c_x = 43.2}
+# { c_y = 27.9}
+# { c_z = 9.5} 		
+
+### holes in choke
+# { h_x = 13.3}
+# { h_z = 5.4} 		
+# { h_steg = 8.1}
+
+### bus bars
+# { b_x = 5}
+# { b_y = 100}
+# { b_z = 2}
+
+### air
+# { a_x = 100}
+# { a_z = 100}
+
+
+brick x {c_x}  y {c_y}  z {c_z}
+brick x {h_x}  y {c_y}  z {h_z}
+move volume 2 x {h_x/2+h_steg/2} z {c_z/2-h_z/2}
+volume 2 copy reflect x
+subtract volume 2 3 from volume 1 keep
+delete volume 2 3 1
+
+
+brick x {b_x}  y {b_y}  z {b_z}
+move volume 5 x {h_steg/2+h_x/2} z {c_z/2}
+volume 5 copy reflect x
+
+volume 4 copy reflect origin 0 0 {c_z/2} direction 0 0 1
+
+move volume all z {-c_z/2}
+
+brick x {a_x}  y {b_y}  z {a_z}
+subtract volume all except volume 8 from volume 8 keep
+delete volume 8
+
+
+webcut volume all with yplane offset {c_y/2}
+webcut volume all with yplane offset {-c_y/2}
+
+
+webcut volume all with zplane offset {c_z}
+webcut volume all with zplane offset {-c_z}
+webcut volume all with zplane offset {h_z}
+webcut volume all with zplane offset {-h_z}
+webcut volume all with zplane offset {b_z/2}
+webcut volume all with zplane offset {-b_z/2}
+webcut volume all with zplane offset 0
+
+webcut volume all with xplane offset {-h_steg/2}
+webcut volume all with xplane offset {h_steg/2}
+webcut volume all with xplane offset {c_x/2-(c_x/2-h_steg/2-h_x)}
+webcut volume all with xplane offset {-c_x/2+(c_x/2-h_steg/2-h_x)}
+webcut volume all with xplane offset {c_x/2}
+webcut volume all with xplane offset {-c_x/2}
+
+webcut volume all with xplane offset {h_steg/2+h_x/2-b_x/2}
+webcut volume all with xplane offset {h_steg/2+h_x/2+b_x/2}
+
+webcut volume all with xplane offset {-h_steg/2-h_x/2+b_x/2}
+webcut volume all with xplane offset {-h_steg/2-h_x/2-b_x/2}
+
+
+
+imprint all
+merge all
+
+
+
+
+######################################
+#### Blocks and Nodesets
+######################################
+block 1 add volume all except volume 10 67 63 65 5 13 68 11 6 66 14 64 146 33 32 7 199 145 102 217 254 27 253 121 26 41 82 218 49 101 236 48 4 25 235 200 122 43 50 81 
+block 1 name "V_air"
+
+block 2 add volume 10 67 63 65 5 13 
+block 2 name "V_busbar_1"
+
+block 3 add volume 68 11 6 66 14 64 
+block 3 name "V_busbar_2"
+
+block 4 add volume 146 33 32 7 199 145 102 217 254 27 253 121 26 41 82 218 49 101 236 48 4 25 235 200 122 43 50 81 
+block 4 name "V_choke"
+
+
+
+nodeset 1 add surface all with z_coord>{a_z/2-1e-3}
+nodeset 1 add surface all with z_coord < { -a_z/2+1e-3 }
+nodeset 1 add surface all with x_coord>{a_x/2-1e-3}
+nodeset 1 add surface all with x_coord < { -a_x/2+1e-3}
+nodeset 1 add surface all with y_coord>{b_y/2-1e-3} except surface 586 593 576 584 566 574 556 564 
+nodeset 1 add surface all with y_coord < { -b_y/2+1e-3} except surface 586 593 576 584 566 574 556 564 
+nodeset 1 name "S_air"
+
+nodeset 2 add surface 586 593 
+nodeset 2 name "S_bar_2_in"
+nodeset 3 add surface 576 584 
+nodeset 3 name "S_bar_1_in"
+nodeset 4 add surface  566 574 
+nodeset 4 name "S_bar_2_out"
+nodeset 5 add surface 556 564 
+nodeset 5 name "S_bar_1_out"
+
+
+
+
+######################################
+#### Mesh
+######################################
+delete mesh
+
+############## lines ##################
+#{eps = 1e-5}
+## busbars height
+curve with length<={b_x+eps} and length>={b_x-eps} interval 10 scheme dualbias factor 1.5 1.5
+mesh curve with length<={b_x+eps} and length>={b_x-eps}
+
+curve with length<={h_steg+eps} and length>={h_steg-eps} interval 6 scheme dualbias factor 1 1
+mesh curve with length<={h_steg+eps} and length>={h_steg-eps}
+
+curve with length<={(h_x-b_x)/2+eps} and length>={(h_x-b_x)/2-eps} interval 6 scheme dualbias factor 1 1
+mesh curve with length<={(h_x-b_x)/2+eps} and length>={(h_x-b_x)/2-eps}
+
+curve with length<={(c_x-2*h_x-h_steg)/2+eps} and length>={(c_x-2*h_x-h_steg)/2-eps} interval 6 scheme dualbias factor 1 1
+mesh curve with length<={(c_x-2*h_x-h_steg)/2+eps} and length>={(c_x-2*h_x-h_steg)/2-eps}
+
+curve with length<={(a_x-c_x)/2+eps} and length>={(a_x-c_x)/2-eps} interval 6 scheme bias factor 1.5
+curve with length<={(a_x-c_x)/2+eps} and length>={(a_x-c_x)/2-eps} orient sense location 0 0 0 
+mesh curve with length<={(a_x-c_x)/2+eps} and length>={(a_x-c_x)/2-eps}
+
+
+curve with length<={b_z/2+eps} and length>={b_z/2-eps} interval 5 scheme bias factor 1.5
+curve with length<={b_z/2+eps} and length>={b_z/2-eps} orient sense location 0 0 0 opposite 
+mesh curve with length<={b_z/2+eps} and length>={b_z/2-eps}
+
+curve with length<={h_z-b_z/2+eps} and length>={h_z-b_z/2-eps} interval 6 scheme dualbias factor 1 1
+mesh curve with length<={h_z-b_z/2+eps} and length>={h_z-b_z/2-eps}
+
+curve with length<={c_z-h_z+eps} and length>={c_z-h_z-eps} interval 6 scheme dualbias factor 1 1
+mesh curve with length<={c_z-h_z+eps} and length>={c_z-h_z-eps}
+
+curve with length<={(a_z-2*c_z)/2+eps} and length>={(a_z-2*c_z)/2-eps} interval 6 scheme bias factor 1.5
+curve with length<={(a_z-2*c_z)/2+eps} and length>={(a_z-2*c_z)/2-eps} orient sense location 0 0 0 
+mesh curve with length<={(a_z-2*c_z)/2+eps} and length>={(a_z-2*c_z)/2-eps}
+
+
+curve with length<={c_y+eps} and length>={c_y-eps} interval 8
+mesh curve with length<={c_y+eps} and length>={c_y-eps}
+
+curve with length<={(b_y-c_y)/2+eps} and length>={(b_y-c_y)/2-eps} interval 6
+mesh curve with length<={(b_y-c_y)/2+eps} and length>={(b_y-c_y)/2-eps}
+
+volume all scheme map
+volume all redistribute nodes off
+volume all autosmooth target off
+mesh volume all
+
+
+
+volume all scale 0.001 # scale from mm to m
+export ansys cdb "choke.cdb" overwrite
+
+
+
+
+
+
+
+
+
+

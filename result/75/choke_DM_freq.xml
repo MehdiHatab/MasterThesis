@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<cfsSimulation xmlns="http://www.cfs++.org/simulation"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.cfs++.org/simulation file:/home/hatab/Devel/CFS_SRC/cfs/share/xml/CFS-Simulation/CFS.xsd">
+
+    <!-- define which files are needed for simulation input & output-->
+    <fileFormats>
+        <input>
+            <!-- specify your input file here -->
+            <cdb fileName="choke.cdb"/>
+        </input>
+        <output>
+            <hdf5/>
+            <text id="txt"/>
+        </output>
+        <materialData file="mat.xml" format="xml"/>
+    </fileFormats>
+
+    <!-- material assignment -->
+    <domain geometryType="3d">
+        <regionList>
+            <region name="V_busbar_1" material="copper"/>
+			<region name="V_busbar_2" material="copper"/>
+			<region name="V_choke" material="ferrite_75"/>
+            <region name="V_air" material="air"/>
+        </regionList>
+    </domain>
+
+
+	<fePolynomialList>
+		<Legendre id="edgePoly">
+			<isoOrder>1</isoOrder>
+		</Legendre>	
+		<Lagrange id="elecPoly">
+			<isoOrder>1</isoOrder>
+		</Lagrange>
+		<Lagrange id="lagMultPoly">
+			<isoOrder>1</isoOrder>
+		</Lagrange>
+	</fePolynomialList>
+
+	<integrationSchemeList>
+		<scheme id="elecInt">
+			<method>Gauss</method>
+			<order>2</order>
+			<mode>absolute</mode>
+		</scheme>
+		<scheme id="lagMultInt">
+			<method>Gauss</method>
+			<order>2</order>
+			<mode>absolute</mode>
+		</scheme>
+	</integrationSchemeList>
+
+
+
+
+    <sequenceStep index="1">
+        <analysis>
+        	<harmonic>
+				<frequencyList>
+					<freq value="1000000000.0" />
+				</frequencyList>
+			</harmonic>
+<!--         	<static/> -->
+<!-- 			<transient> -->
+<!-- 				<numSteps>20</numSteps> -->
+<!-- 				<deltaT>1/(20*1e5)</deltaT> -->
+<!-- 			</transient> -->
+        </analysis>
+                <pdeList>
+        	<magneticEdge formulation="Darwin">
+				<regionList>
+                    <region name="V_air"  isConducRegion="false" elecScalPolyId="elecPoly" lagrangeMultPolyId="lagMultPoly" elecScalIntegId="elecInt" lagrangeMultIntegId="lagMultInt"/>
+					<region name="V_busbar_1" isConducRegion="true" elecScalPolyId="elecPoly" lagrangeMultPolyId="lagMultPoly" elecScalIntegId="elecInt" lagrangeMultIntegId="lagMultInt"/>
+					<region name="V_busbar_2" isConducRegion="true" elecScalPolyId="elecPoly" lagrangeMultPolyId="lagMultPoly" elecScalIntegId="elecInt" lagrangeMultIntegId="lagMultInt"/>
+					<region name="V_choke" isConducRegion="true"
+						elecScalPolyId="elecPoly" lagrangeMultPolyId="lagMultPoly"
+						elecScalIntegId="elecInt" lagrangeMultIntegId="lagMultInt" />
+				</regionList>
+<!-- 				<nonLinList> -->
+<!-- 					<permeability id="nonLin" /> -->
+<!-- 				</nonLinList> -->
+
+				<bcsAndLoads>
+					<elecPotential name="S_bar_1_in" value="2"/>
+					<elecPotential name="S_bar_2_in" value="0"/>
+					<elecPotential name="S_bar_1_out" value="1"/>
+					<elecPotential name="S_bar_2_out" value="1"/>
+					
+					<lagrangeMultiplier name="S_air" value="0"/>
+					<lagrangeMultiplier name="S_bar_1_in" value="0"/>
+					<lagrangeMultiplier name="S_bar_2_in" value="0"/>
+					<lagrangeMultiplier name="S_bar_1_out" value="0"/>
+					<lagrangeMultiplier name="S_bar_2_out" value="0"/>
+
+
+                	<fluxParallel name="S_air"/>
+                	<fluxParallel name="S_bar_1_in"/>
+                	<fluxParallel name="S_bar_2_in"/>
+                	<fluxParallel name="S_bar_1_out"/>
+                	<fluxParallel name="S_bar_2_out"/>
+
+
+                </bcsAndLoads>
+                
+                <storeResults>
+					<elemResult type="magFluxDensity">
+                		<allRegions/>
+                	</elemResult>
+                	<nodeResult type="elecPotential">
+                		<allRegions/>
+                	</nodeResult>
+					<elemResult type="elecFieldIntensityTransversal">
+						<allRegions/>
+					</elemResult>
+					<elemResult type="elecFieldIntensityLongitudinal">
+						<allRegions/>
+					</elemResult>
+					<elemResult type="elecFieldIntensity">
+						<allRegions/>
+					</elemResult>
+					<elemResult type="magEddyCurrentDensity">
+						<allRegions/>
+					</elemResult>
+					<surfRegionResult type="magEddyCurrent">
+						<surfRegionList>
+							<surfRegion name="S_bar_1_in" writeAsHistResult="yes" />
+							<surfRegion name="S_bar_2_in" writeAsHistResult="yes" />
+							<surfRegion name="S_bar_1_out" writeAsHistResult="yes" />
+							<surfRegion name="S_bar_2_out" writeAsHistResult="yes" />
+						</surfRegionList>
+					</surfRegionResult>
+					<surfRegionResult type="displacementCurrent">
+						<surfRegionList>
+							<surfRegion name="S_bar_1_in" writeAsHistResult="yes" />
+							<surfRegion name="S_bar_2_in" writeAsHistResult="yes" />
+							<surfRegion name="S_bar_1_out" writeAsHistResult="yes" />
+							<surfRegion name="S_bar_2_out" writeAsHistResult="yes" />
+						</surfRegionList>
+					</surfRegionResult>
+                </storeResults>
+        	</magneticEdge>
+        </pdeList>
+
+		<linearSystems>
+			<system>
+				<solutionStrategy>
+					<standard>
+<!-- 						<exportLinSys format="matrix-market" system="true" -->
+<!-- 				      		rhs="true" baseName="MAT" damping="true" stiffness="true" /> -->
+						<matrix storage="sparseSym" reordering="Metis"/>
+<!-- 				      <setup idbcHandling="elimination"/> -->
+				      
+					</standard>
+				</solutionStrategy>
+				<solverList>
+					<pardiso>
+<!-- 						<symStruct>yes</symStruct> -->
+<!-- 						<invBoundIncompFac>800</invBoundIncompFac> -->
+ 						<IterRefineSteps>20</IterRefineSteps>
+						<stats>no</stats>
+					</pardiso>
+				</solverList>
+			</system>
+		</linearSystems>
+</sequenceStep>
+
+
+        
+    
+</cfsSimulation>
